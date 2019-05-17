@@ -49,6 +49,7 @@ import org.gradle.api.publish.maven.internal.artifact.MavenArtifactNotationParse
 import org.gradle.api.publish.maven.internal.publication.DefaultMavenPublication;
 import org.gradle.api.publish.maven.internal.publication.MavenPublicationInternal;
 import org.gradle.api.publish.maven.internal.publication.WritableMavenProjectIdentity;
+import org.gradle.api.publish.maven.internal.publisher.DuplicatePublicationTracker;
 import org.gradle.api.publish.maven.internal.publisher.MutableMavenProjectIdentity;
 import org.gradle.api.publish.maven.internal.versionmapping.DefaultVersionMappingStrategy;
 import org.gradle.api.publish.maven.tasks.GenerateMavenPom;
@@ -88,6 +89,7 @@ public class MavenPublishPlugin implements Plugin<Project> {
     private final FeaturePreviews featurePreviews;
     private final ImmutableAttributesFactory immutableAttributesFactory;
     private final ProviderFactory providerFactory;
+    private final DuplicatePublicationTracker duplicatePublicationTracker = new DuplicatePublicationTracker();
     private CollectionCallbackActionDecorator collectionCallbackActionDecorator;
 
     @Inject
@@ -174,6 +176,7 @@ public class MavenPublishPlugin implements Plugin<Project> {
                 final String repositoryName = repository.getName();
                 final String publishTaskName = "publish" + capitalize(publicationName) + "PublicationTo" + capitalize(repositoryName) + "Repository";
                 tasks.register(publishTaskName, PublishToMavenRepository.class, publishTask -> {
+                    publishTask.duplicatePublicationTracker = duplicatePublicationTracker;
                     publishTask.setPublication(publication);
                     publishTask.setRepository(repository);
                     publishTask.setGroup(PublishingPlugin.PUBLISH_TASK_GROUP);
