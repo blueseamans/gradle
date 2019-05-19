@@ -135,6 +135,8 @@ public class MavenPublishPlugin implements Plugin<Project> {
                 realizePublishingTasksLater(project, extension);
             }
         });
+
+        project.getRepositories().mavenLocal();
     }
 
     private void realizePublishingTasksLater(final Project project, final PublishingExtension extension) {
