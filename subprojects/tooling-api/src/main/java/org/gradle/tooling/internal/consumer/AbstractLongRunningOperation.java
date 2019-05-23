@@ -108,6 +108,14 @@ public abstract class AbstractLongRunningOperation<T extends AbstractLongRunning
         return getThis();
     }
 
+    /**
+     * This is not part of the public API, yet.
+     */
+    public T setInteractiveInput(boolean interactiveInput) {
+//        operationParamsBuilder.setInteractiveInput(interactiveInput);
+        return getThis();
+    }
+
     @Override
     public T setJavaHome(File javaHome) {
         operationParamsBuilder.setJavaHome(javaHome);
